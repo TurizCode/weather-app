@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './WeatherApp.css'
 
+// importing all the assets
 import search_icon from '../assets/search.png';
 import clear_icon from '../assets/clear.png';
 import cloud_icon from '../assets/cloud.png';
@@ -18,34 +19,44 @@ import showerRain_icon from '../assets/shower-rain.png';
 import thunderStrom_icon from '../assets/thunder-storm.png';
 
 export const WeatherApp = () => {
-
+    // declaring the api key
     let api_key = "3e0207d9327062d3ef4119e6d46f98e0";
 
+    // using the useState that I learned in class
     const [wicon, setWicon] = useState(cloud_icon);
 
+    // making the algorithm for search bar
     const search = async () => {
+        // getting the name of the city that the user input
         const element = document.getElementsByClassName("cityInput")
+
+        // if the input was void it will return nothing
         if(element[0].value === "") {
             return 0;
         }
 
+        // directing the url to get API data based on the city input from user
         let url = `https://api.openweathermap.org/data/2.5/weather?q=${element[0].value}&units=Metric&appid=${api_key}`
 
+        // fetch the API url
         let response = await fetch(url);
         let data = await response.json();
 
+        // declare variabel that will be changed later on based on the result of data array from the API
         const humidity = document.getElementsByClassName("humidity-percentage");
         const wind = document.getElementsByClassName("wind-rate");
         const temperature = document.getElementsByClassName("weather-temp");
         const location = document.getElementsByClassName("weather-location");
         const description = document.getElementsByClassName("weather-description");
 
+        // change the value of the variabel so it match the retrived data API
         humidity[0].innerHTML = data.main.humidity+" %";
         wind[0].innerHTML = data.wind.speed+" km/h";
         temperature[0].innerHTML = Math.floor(data.main.temp)+"°C";
         location[0].innerHTML = data.name;
         description[0].innerHTML = data.weather[0].description;
 
+        // change the icon based on the code that we get from the API
         if(data.weather[0].icon === "01d") {
             setWicon(clearDay_icon);
         } else if(data.weather[0].icon === "01n") {
